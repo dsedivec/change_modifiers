@@ -11,11 +11,14 @@
 #include <strings.h>
 #include <getopt.h>
 #include <CoreFoundation/CoreFoundation.h>
-#include <IOKit/hid/IOHIDEventSystemClient.h>
-#include <IOKit/hid/IOHIDEventSystemKeys.h>
+#include <IOKit/hidsystem/IOHIDEventSystemClient.h>
+#include <IOKit/hidsystem/IOHIDServiceClient.h>
 #include "AssertMacros.h"
 #include "utility.h"
 #include <IOKit/hid/IOHIDUsageTables.h>
+
+extern void IOHIDEventSystemClientSetMatching(IOHIDEventSystemClientRef, CFDictionaryRef);
+extern void IOHIDEventSystemClientSetMatchingMultiple(IOHIDEventSystemClientRef, CFArrayRef);
 
 static NSArray *matchingKeys(void) {
     return @[ @kIOHIDVendorIDKey, @kIOHIDProductIDKey, @kIOHIDTransportKey,

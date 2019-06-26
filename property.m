@@ -7,7 +7,6 @@
 //
 
 #import  <Foundation/Foundation.h>
-#include <IOKit/hid/IOHIDEventSystemKeys.h>
 #include "hdutil.h"
 #include <getopt.h>
 #include "utility.h"
@@ -102,11 +101,7 @@ int property (int argc, const char * argv[]) {
     NSString                    *propertyKey = NULL;
     bool                        matching = false;
     
-#ifdef INTERNAL
     client = IOHIDEventSystemClientCreateWithType(kCFAllocatorDefault, kIOHIDEventSystemClientTypeMonitor, NULL);
-#else
-    client = IOHIDEventSystemClientCreateWithType(kCFAllocatorDefault, kIOHIDEventSystemClientTypeSimple, NULL);
-#endif
     if (!client) {
         status = STATUS_ERROR;
         goto exit;
