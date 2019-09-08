@@ -12,12 +12,12 @@ import collections
 import itertools
 import json
 import operator
+import os
 import os.path
 import plistlib
 import re
 import subprocess
 import sys
-import os
 import warnings
 
 # Most keys can be taken from the USB spec's "HID Usage Tables".
