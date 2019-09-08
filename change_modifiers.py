@@ -282,7 +282,10 @@ def main(argv):
             if os.access(our_hidutil, os.X_OK):
                 args.hidutil = our_hidutil
         set_modifier_mappings(
-            keyboards, args.mappings, hidutil=args.hidutil, verbose=args.verbose
+            keyboards,
+            args.mappings,
+            hidutil_path=args.hidutil,
+            verbose=args.verbose,
         )
     elif args.command == "print":
         print_modifier_mappings()
