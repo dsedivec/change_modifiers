@@ -277,7 +277,7 @@ def main(argv):
             keyboards = get_keyboard_ids()
         if not args.hidutil:
             our_hidutil = os.path.join(
-                os.path.dirname(argv[0]) or ".", "hidtool_modified"
+                os.path.dirname(argv[0]) or ".", "hidutil_modifiers"
             )
             if os.access(our_hidutil, os.X_OK):
                 args.hidutil = our_hidutil
