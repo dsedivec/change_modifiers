@@ -216,7 +216,7 @@ def set_modifier_mappings(
                 ]
                 if verbose:
                     print("Will execute:", " ".join(hidutil_cmd))
-                    subprocess.check_call(hidutil_cmd)
+                subprocess.check_call(hidutil_cmd)
             else:
                 warnings.warn(
                     (
