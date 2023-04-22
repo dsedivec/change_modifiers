@@ -1,12 +1,5 @@
 #!/usr/bin/env python
 
-from __future__ import (
-    absolute_import,
-    division,
-    print_function,
-    unicode_literals,
-)
-
 import argparse
 import collections
 import itertools
@@ -56,13 +49,17 @@ KEY_CODE_TO_NAME = {
     MASK_APPLE_TOP_CASE | 0x03: "top_case_fn",
 }
 
-KEY_NAME_TO_CODE = {name: code for code, name in KEY_CODE_TO_NAME.iteritems()}
+KEY_NAME_TO_CODE = {name: code for code, name in KEY_CODE_TO_NAME.items()}
 
 
 def get_keyboard_ids():
-    hidutil_out = subprocess.check_output(["hidutil", "list", "-m", "keyboard"])
+    hidutil_out = subprocess.check_output(
+        ["hidutil", "list", "-m", "keyboard"],
+        text=True,
+    )
     lines = iter(hidutil_out.splitlines())
     for line in lines:
+        print(line)
         if line.lower().strip() == "devices:":
             break
     else:
@@ -105,9 +102,9 @@ def read_modifier_mappings():
     plist_xml = subprocess.check_output(
         ["defaults", "-currentHost", "export", "-g", "-"]
     )
-    plist = plistlib.readPlistFromString(plist_xml)
+    plist = plistlib.loads(plist_xml)
     keyboards = collections.defaultdict(dict)
-    for key, val in plist.iteritems():
+    for key, val in plist.items():
         match = re.search(
             r"^com\.apple\.keyboard\.modifiermapping\.(\d+)-(\d+)-0$", key
         )
@@ -134,7 +131,7 @@ def print_modifier_mappings():
         if its_mappings:
             mapping_strs = [
                 "  %s -> %s" % (KEY_CODE_TO_NAME[src], KEY_CODE_TO_NAME[dst])
-                for src, dst in its_mappings.iteritems()
+                for src, dst in its_mappings.items()
             ]
             mapping_strs.sort()
             out.write("\n".join(mapping_strs))
@@ -176,7 +173,7 @@ def set_modifier_mappings(
         kbd_mappings = all_current_mappings[keyboard]
         keyboard_name = "%04X:%04X" % keyboard
         needs_changes = False
-        for src_code, dst_code in code_mappings.iteritems():
+        for src_code, dst_code in code_mappings.items():
             if kbd_mappings.get(src_code) != dst_code:
                 print(
                     "Keyboard %s: Changing %s -> %s"
@@ -203,7 +200,7 @@ def set_modifier_mappings(
                     "HIDKeyboardModifierMappingSrc": src_code,
                     "HIDKeyboardModifierMappingDst": dst_code,
                 }
-                for src_code, dst_code in kbd_mappings.iteritems()
+                for src_code, dst_code in kbd_mappings.items()
             ]
             if hidutil_path:
                 hidutil_cmd = [
@@ -234,7 +231,7 @@ def set_modifier_mappings(
                 "write",
                 "-g",
                 key,
-                plistlib.writePlistToString(plist),
+                plistlib.dumps(plist),
             ]
             if verbose:
                 print("Will execute:", " ".join(defaults_cmd))
